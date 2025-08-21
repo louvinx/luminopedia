@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
-import android.widget.ImageButton
+import android.widget.EditText
+import android.widget.Button
 import android.widget.TextView
 
 class TaskAdapter(
@@ -20,12 +21,12 @@ class TaskAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(resource, parent, false)
-        val task = tasks[position]
+        val task = getItem(position) ?: return view
 
         val textViewTitle = view.findViewById<TextView>(R.id.textViewTaskTitle)
         val checkBoxTask = view.findViewById<CheckBox>(R.id.checkBoxTask)
-        val buttonEdit = view.findViewById<ImageButton>(R.id.buttonEdit)
-        val buttonDelete = view.findViewById<ImageButton>(R.id.buttonDelete)
+        val buttonEdit = view.findViewById<Button>(R.id.buttonEdit)
+        val buttonDelete = view.findViewById<Button>(R.id.buttonDelete)
 
         textViewTitle.text = task.title
         checkBoxTask.isChecked = task.isCompleted
@@ -58,7 +59,7 @@ class TaskAdapter(
 
     private fun showEditDialog(task: Task, position: Int) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_task, null)
-        val editTextTitle = dialogView.findViewById<TextView>(R.id.editTextTaskTitle)
+        val editTextTitle = dialogView.findViewById<EditText>(R.id.editTextTaskTitle)
         val checkBoxCompleted = dialogView.findViewById<CheckBox>(R.id.checkBoxCompleted)
 
         editTextTitle.setText(task.title)
@@ -70,7 +71,6 @@ class TaskAdapter(
             .setPositiveButton("Sauvegarder") { _, _ ->
                 task.title = editTextTitle.text.toString()
                 task.isCompleted = checkBoxCompleted.isChecked
-                tasks[position] = task
                 taskStorage.saveTasks(tasks)
                 onTaskUpdated()
             }

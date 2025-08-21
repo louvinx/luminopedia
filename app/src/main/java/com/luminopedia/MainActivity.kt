@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.Button
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var taskStorage: TaskStorage
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             this,
             R.layout.task_item,
             tasks,
-            onTaskUpdated = { notifyDataSetChanged() },
+            onTaskUpdated = { adapter.notifyDataSetChanged() },
             taskStorage
         )
 
@@ -53,9 +53,5 @@ class MainActivity : AppCompatActivity() {
                 editTextTask.text.clear()
             }
         }
-    }
-
-    private fun notifyDataSetChanged() {
-        adapter.notifyDataSetChanged()
     }
 }
